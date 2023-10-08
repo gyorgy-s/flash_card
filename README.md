@@ -17,3 +17,10 @@ If the user clicks on the "correct" button, the word is then removed from the
 pool, as it is already known. If the user clicks on the "wrong" button, the
 card will stay in the pool. In both cases, a new card will be picked from the
 pool.
+
+To install requirtements, run from the main folder:
+
+
+```
+pip install -r requirements.txt 
+```
