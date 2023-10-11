@@ -102,7 +102,6 @@ class Card:
     def pop_word(self):
         """Removes the current word from the dicitionary."""
         if len(self.dictionary) > 0:
-            print(self.dictionary)
             self.dictionary = self.dictionary.drop(self.current_word[0])
             self.dictionary.to_csv(os.path.join("", "data", "to_learn.csv"))
 
