@@ -37,7 +37,10 @@ import pandas as pd
 BACKGROUND_COLOR = "#B1DDC6"
 FOREGROUND_COLOR = "#FFFFFF"
 
-DATA_SOURCE = "source.csv"
+if os.path.exists(os.path.join("", "data", "to_learn.csv")):
+    DATA_SOURCE = "to_learn.csv"
+else:
+    DATA_SOURCE = "source.csv"
 
 # Front - back direction, if the default order should be switched, swap the
 # values of these. The default values are:
@@ -49,6 +52,7 @@ BACK = 1
 
 class Card:
     """Card class for the flash cards. Implements the main functions and features of the flsh card."""
+
     def __init__(self, titletext, wordtext, cardimg, cardfrontimg, cardbackimg, frontback):
         # Initializing the dictionary. First reading the first row of the CSV,
         # getting the header for the values. Then reaping the rest of the CSV,
@@ -67,8 +71,9 @@ class Card:
             os.path.join("", "data", DATA_SOURCE),
             index_col=0,
             header=None,
-            skiprows=1
-        ).to_dict(orient="dict")[1]
+            skiprows=1,
+            names=[self.title_front, self.title_back]
+        )
 
         self.current_word = self.get_random_word()
         self.side = -1
@@ -81,10 +86,14 @@ class Card:
         self.card_back_img = cardbackimg
         self.front_back = frontback
 
+
     def get_random_word(self):
         """Gets a random key-value pair from the dicitionary."""
-        if self.dictionary :
-            word = random.choice(list(self.dictionary.items()))
+        if not self.dictionary.empty :
+            if FRONT:
+                word = list(self.dictionary.sample(1).to_dict(orient="dict")[self.title_front].items())[0]
+            else:
+                word = list(self.dictionary.sample(1).to_dict(orient="dict")[self.title_back].items())[0]
         else:
             word = ("THE END","THE END")
         self.current_word = word
@@ -93,7 +102,9 @@ class Card:
     def pop_word(self):
         """Removes the current word from the dicitionary."""
         if len(self.dictionary) > 0:
-            self.dictionary.pop(self.current_word[0])
+            print(self.dictionary)
+            self.dictionary = self.dictionary.drop(self.current_word[0])
+            self.dictionary.to_csv(os.path.join("", "data", "to_learn.csv"))
 
     def set_word(self, canv):
         """Updates the Tk widgets according the current words."""
@@ -111,7 +122,6 @@ class Card:
         self.side *= -1
         self.set_word(canv)
 
-
     def correct(self, canv):
         """If the user was correct, removes the current word from the pool,
         then gets a new one and updates the widgets."""
@@ -119,7 +129,6 @@ class Card:
         self.get_random_word()
         self.side = -1
         self.set_word(canv)
-
 
     def wrong(self, canv):
         """Id the user was wrong, gets a new card from the pool and updates the widgets."""

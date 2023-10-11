@@ -1,5 +1,5 @@
 """
-Main module for the falsh card app.
+Main module for the flash card app.
 
 It is an app with a GUI to implement a flash card app. The sides of the cards
 are read from an external CSV, where each line consists of a pair of strings.
@@ -80,7 +80,7 @@ if __name__ == "__main__":
         font=FONT_SWITCH
     )
 
-    # Creatin the card class, passing the canvas elements as argument, as these
+    # Creating the card class, passing the canvas elements as argument, as these
     # will be modified within the class methods.
     flash_card = card.Card(
         titletext=title_text,
@@ -91,7 +91,7 @@ if __name__ == "__main__":
         frontback=front_back
     )
 
-    # Buttons for the correct, worng guess and the switch direction.
+    # Buttons for the correct, wrong guess and the switch direction.
     wrong_button = tk.Button(
         image=wrong_img,
         highlightthickness=0,
